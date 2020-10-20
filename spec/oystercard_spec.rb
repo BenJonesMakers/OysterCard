@@ -1,5 +1,11 @@
 require "oystercard"
 
+RSpec::Matchers.define :be_boolean do
+  match do |actual_value|
+    [true, false].include? actual_value
+  end
+end
+
 describe OysterCard do
   describe "#balance" do
     it "responds" do
@@ -37,5 +43,21 @@ describe OysterCard do
       subject.top_up(10)
       expect { subject.deduct(5) }.to change { subject.balance }.by(-5)
     end
+  end
+
+  describe "#touch_in" do
+    it { is_expected.to respond_to(:touch_in)}
+  end
+
+  describe "#in_journey?" do
+    it { is_expected.to respond_to(:in_journey?)}
+
+    it "responds to the query with true/false" do
+      expect(subject.in_journey?).to be_boolean
+    end 
+  end
+
+  describe "#touch_out" do
+    it {is_expected.to respond_to(:touch_out)}
   end
 end
