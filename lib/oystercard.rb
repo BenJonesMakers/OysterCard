@@ -15,4 +15,8 @@ attr_reader(:MAX_AMOUNT)
       @balance += amount
     end
   end
+
+  def deduct(amount)
+    @balance -= amount
+  end
 end
