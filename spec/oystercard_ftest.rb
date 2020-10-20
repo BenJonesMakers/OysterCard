@@ -30,3 +30,15 @@ begin
 rescue => error
   puts error.message
 end
+
+begin
+  usercard02 = OysterCard.new
+  usercard02.touch_in
+  puts "touch in passed - balance is #{usercard02.balance}"
+rescue NoFunds => error
+  puts "expects error message 'insufficent funds'"
+  puts error.message
+rescue => error
+  puts "Unexpected error"
+  puts error.message
+end

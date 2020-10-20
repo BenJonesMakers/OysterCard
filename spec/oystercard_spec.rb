@@ -48,13 +48,21 @@ describe OysterCard do
   describe "#touch_in" do
     it { is_expected.to respond_to(:touch_in)}
 
-    it "can touch in" do
-      subject.touch_in
-      expect(subject).to be_in_journey
+    context "positive balance of more that 1" do
+      it "can touch in" do
+        allow(subject).to receive(:balance).and_return(10)
+        subject.touch_in
+        expect(subject).to be_in_journey
+      end
     end
-#    it "responds to the query with true/false" do
-#      expect(subject.in_journey?).to be_boolean
-#    end
+
+    context "zero balance" do
+      it "raises an error due to lack of funds" do
+        allow(subject).to receive(:balance).and_return(0)
+        expect { subject.touch_in }.to raise_error(NoFunds, "insufficient funds")
+      end
+    end
+
   end
 
   describe "#in_journey?" do
@@ -68,5 +76,7 @@ describe OysterCard do
       subject.touch_out
       expect(subject).to_not be_in_journey
     end
+
   end
+
 end

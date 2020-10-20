@@ -1,12 +1,14 @@
 class OysterCard
 
+MIN_JOURNEY_COST = 1
+
 attr_reader(:balance)
 attr_reader(:MAX_AMOUNT)
 
   def initialize
     @balance = 0
     @MAX_AMOUNT = 90
-#    @in_journey = false
+    @in_journey = false
   end
 
   def top_up(amount)
@@ -22,6 +24,8 @@ attr_reader(:MAX_AMOUNT)
   end
 
   def touch_in
+    raise NoFunds, "insufficient funds" if min_balance?
+
     @in_journey = true
   end
 
@@ -30,6 +34,16 @@ attr_reader(:MAX_AMOUNT)
   end
 
   def touch_out
-#    @in_journey = false
+    @in_journey = false
   end
+end
+
+private
+
+def min_balance?
+  self.balance < OysterCard::MIN_JOURNEY_COST
+end
+
+class NoFunds < StandardError
+
 end
