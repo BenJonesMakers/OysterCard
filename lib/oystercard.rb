@@ -6,7 +6,7 @@ attr_reader(:MAX_AMOUNT)
   def initialize
     @balance = 0
     @MAX_AMOUNT = 90
-    @in_journey = false
+#    @in_journey = false
   end
 
   def top_up(amount)
@@ -30,6 +30,6 @@ attr_reader(:MAX_AMOUNT)
   end
 
   def touch_out
-    @in_journey = false
+#    @in_journey = false
   end
 end

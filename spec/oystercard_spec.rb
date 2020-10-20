@@ -47,17 +47,26 @@ describe OysterCard do
 
   describe "#touch_in" do
     it { is_expected.to respond_to(:touch_in)}
+
+    it "can touch in" do
+      subject.touch_in
+      expect(subject).to be_in_journey
+    end
+#    it "responds to the query with true/false" do
+#      expect(subject.in_journey?).to be_boolean
+#    end
   end
 
   describe "#in_journey?" do
     it { is_expected.to respond_to(:in_journey?)}
-
-    it "responds to the query with true/false" do
-      expect(subject.in_journey?).to be_boolean
-    end 
   end
 
   describe "#touch_out" do
     it {is_expected.to respond_to(:touch_out)}
+
+    it "can touch out" do
+      subject.touch_out
+      expect(subject).to_not be_in_journey
+    end
   end
 end
