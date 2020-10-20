@@ -42,3 +42,10 @@ rescue => error
   puts "Unexpected error"
   puts error.message
 end
+
+usercard03 = OysterCard.new
+usercard03.top_up(10)
+puts "\nminimum journey to be deducted"
+puts "current balance - #{usercard03.balance}"
+usercard03.touch_out
+puts "new balance should be reduced by 1 - #{usercard03.balance}"

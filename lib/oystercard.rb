@@ -19,10 +19,6 @@ attr_reader(:MAX_AMOUNT)
     end
   end
 
-  def deduct(amount)
-    @balance -= amount
-  end
-
   def touch_in
     raise NoFunds, "insufficient funds" if min_balance?
 
@@ -34,14 +30,19 @@ attr_reader(:MAX_AMOUNT)
   end
 
   def touch_out
+    deduct(MIN_JOURNEY_COST)
     @in_journey = false
   end
-end
 
 private
 
-def min_balance?
-  self.balance < OysterCard::MIN_JOURNEY_COST
+  def min_balance?
+    self.balance < OysterCard::MIN_JOURNEY_COST
+  end
+
+  def deduct(amount)
+    @balance -= amount
+  end
 end
 
 class NoFunds < StandardError
