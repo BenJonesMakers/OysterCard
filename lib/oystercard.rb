@@ -8,7 +8,6 @@ attr_reader(:MAX_AMOUNT)
   def initialize
     @balance = 0
     @MAX_AMOUNT = 90
-    @in_journey = false
   end
 
   def top_up(amount)
@@ -19,19 +18,23 @@ attr_reader(:MAX_AMOUNT)
     end
   end
 
-  def touch_in
+  def touch_in(entry_station)
     raise NoFunds, "insufficient funds" if min_balance?
 
-    @in_journey = true
+    @entry_station = entry_station
   end
 
   def in_journey?
-    @in_journey
+    !@entry_station.nil?
   end
 
   def touch_out
     deduct(MIN_JOURNEY_COST)
-    @in_journey = false
+    @entry_station = nil
+  end
+
+  def show_touch_in_station
+    @entry_station
   end
 
 private

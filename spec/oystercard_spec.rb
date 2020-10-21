@@ -37,12 +37,14 @@ describe OysterCard do
   end
 
   describe "#touch_in" do
-    it { is_expected.to respond_to(:touch_in)}
+    let (:entry_station) {"entry_station"}
+
+    it { is_expected.to respond_to(:touch_in).with(1).argument}
 
     context "positive balance of more that 1" do
       it "can touch in" do
         allow(subject).to receive(:balance).and_return(10)
-        subject.touch_in
+        subject.touch_in(entry_station)
         expect(subject).to be_in_journey
       end
     end
@@ -50,7 +52,7 @@ describe OysterCard do
     context "zero balance" do
       it "raises an error due to lack of funds" do
         allow(subject).to receive(:balance).and_return(0)
-        expect { subject.touch_in }.to raise_error(NoFunds, "insufficient funds")
+        expect { subject.touch_in(entry_station) }.to raise_error(NoFunds, "insufficient funds")
       end
     end
 
@@ -74,4 +76,20 @@ describe OysterCard do
     end
   end
 
+  describe "#show_touch_in_station" do
+    it { is_expected.to respond_to(:show_touch_in_station)}
+
+    it "displays a station" do
+      allow(subject).to receive(:balance).and_return(10)
+      subject.touch_in("entry_station")
+      expect(subject.show_touch_in_station).to eq "entry_station"
+    end
+
+    it "shows nil after touching out" do
+      allow(subject).to receive(:balance).and_return(10)
+      subject.touch_in("entry_station")
+      subject.touch_out
+      expect(subject.show_touch_in_station).to be_nil
+    end
+  end
 end
