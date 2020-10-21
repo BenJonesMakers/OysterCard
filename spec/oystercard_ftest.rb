@@ -26,7 +26,7 @@ rescue => error
 end
 
 begin
-  usercard01.touch_out
+  usercard01.touch_out("exit_station")
   puts "Passed touch_out"
 rescue => error
   puts error.message
@@ -48,10 +48,18 @@ usercard03 = OysterCard.new
 usercard03.top_up(10)
 puts "\nminimum journey to be deducted"
 puts "current balance - #{usercard03.balance}"
-usercard03.touch_out
+usercard03.touch_out("exit_station")
 puts "new balance should be reduced by 1 - #{usercard03.balance}"
 
 usercard04 = OysterCard.new
 usercard04.top_up(10)
 usercard04.touch_in("entry_station")
 usercard04.show_touch_in_station
+
+usercard05 = OysterCard.new
+usercard05.top_up(10)
+2.times do
+  usercard05.touch_in("entry_station")
+  usercard05.touch_out("exit_station")
+end
+usercard05.show_journeys

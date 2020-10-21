@@ -63,16 +63,18 @@ describe OysterCard do
   end
 
   describe "#touch_out" do
-    it {is_expected.to respond_to(:touch_out)}
+    let(:exit_station) { "exit_station" }
+
+    it {is_expected.to respond_to(:touch_out).with(1).argument}
 
     it "can touch out" do
-      subject.touch_out
+      subject.touch_out(exit_station)
       expect(subject).to_not be_in_journey
     end
 
     it "touch out reduces balance by MIN_JOURNEY_COST" do
       subject.top_up(10)
-      expect { subject.touch_out }.to change { subject.balance }.by(- OysterCard::MIN_JOURNEY_COST)
+      expect { subject.touch_out(exit_station) }.to change { subject.balance }.by(- OysterCard::MIN_JOURNEY_COST)
     end
   end
 
@@ -88,8 +90,28 @@ describe OysterCard do
     it "shows nil after touching out" do
       allow(subject).to receive(:balance).and_return(10)
       subject.touch_in("entry_station")
-      subject.touch_out
+      subject.touch_out("exit_station")
       expect(subject.show_touch_in_station).to be_nil
+    end
+  end
+
+  describe "#show_journeys" do
+    it {is_expected.to respond_to(:show_journeys)}
+
+    it "displays an empty list of journeys on new card" do
+      expect(subject.show_journeys).to eq []
+    end
+
+    it "displays all journeys entry/exit stations" do
+      allow(subject).to receive(:balance).and_return(10)
+      2.times do
+        subject.touch_in("entry_station")
+        subject.touch_out("exit_station")
+      end
+      expect(subject.show_journeys).to eq [
+        { :entry => "entry_station", :exit => "exit_station"},
+        { :entry => "entry_station", :exit => "exit_station"}
+      ]
     end
   end
 end

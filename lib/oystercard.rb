@@ -8,6 +8,7 @@ attr_reader(:MAX_AMOUNT)
   def initialize
     @balance = 0
     @MAX_AMOUNT = 90
+    @journeys = []
   end
 
   def top_up(amount)
@@ -28,13 +29,18 @@ attr_reader(:MAX_AMOUNT)
     !@entry_station.nil?
   end
 
-  def touch_out
+  def touch_out(exit_station)
     deduct(MIN_JOURNEY_COST)
+    journey_log(@entry_station, exit_station)
     @entry_station = nil
   end
 
   def show_touch_in_station
     @entry_station
+  end
+
+  def show_journeys
+    @journeys
   end
 
 private
@@ -45,6 +51,10 @@ private
 
   def deduct(amount)
     @balance -= amount
+  end
+
+  def journey_log(entry_station, exit_station)
+    @journeys << {:entry => entry_station, :exit => exit_station}
   end
 end
 
