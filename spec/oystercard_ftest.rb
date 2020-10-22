@@ -67,3 +67,9 @@ usercard05.show_journeys
 
 new_station = Station.new("Kings Cross", 3)
 p new_station
+
+p "test case for not touching in"
+usercard06 = OysterCard.new
+usercard06.top_up(10)
+usercard06.touch_out(new_station)
+p usercard06.show_journeys

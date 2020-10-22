@@ -37,15 +37,14 @@ describe OysterCard do
   end
 
   describe "#touch_in" do
-    let (:entry_station) {"entry_station"}
+    let (:entry_station) {:station}
 
     it { is_expected.to respond_to(:touch_in).with(1).argument}
 
     context "positive balance of more that 1" do
       it "can touch in" do
         allow(subject).to receive(:balance).and_return(10)
-        subject.touch_in(entry_station)
-        expect(subject).to be_in_journey
+        expect(subject.touch_in(entry_station)).to eq entry_station
       end
     end
 
@@ -58,18 +57,13 @@ describe OysterCard do
 
   end
 
-  describe "#in_journey?" do
-    it { is_expected.to respond_to(:in_journey?)}
-  end
-
   describe "#touch_out" do
-    let(:exit_station) { "exit_station" }
+    let(:exit_station) { :station }
 
     it {is_expected.to respond_to(:touch_out).with(1).argument}
 
     it "can touch out" do
-      subject.touch_out(exit_station)
-      expect(subject).to_not be_in_journey
+      expect(subject.touch_out(exit_station)).to eq exit_station
     end
 
     it "touch out reduces balance by MIN_JOURNEY_COST" do
@@ -78,40 +72,4 @@ describe OysterCard do
     end
   end
 
-  describe "#show_touch_in_station" do
-    it { is_expected.to respond_to(:show_touch_in_station)}
-
-    it "displays a station" do
-      allow(subject).to receive(:balance).and_return(10)
-      subject.touch_in("entry_station")
-      expect(subject.show_touch_in_station).to eq "entry_station"
-    end
-
-    it "shows nil after touching out" do
-      allow(subject).to receive(:balance).and_return(10)
-      subject.touch_in("entry_station")
-      subject.touch_out("exit_station")
-      expect(subject.show_touch_in_station).to be_nil
-    end
-  end
-
-  describe "#show_journeys" do
-    it {is_expected.to respond_to(:show_journeys)}
-
-    it "displays an empty list of journeys on new card" do
-      expect(subject.show_journeys).to eq []
-    end
-
-    it "displays all journeys entry/exit stations" do
-      allow(subject).to receive(:balance).and_return(10)
-      2.times do
-        subject.touch_in("entry_station")
-        subject.touch_out("exit_station")
-      end
-      expect(subject.show_journeys).to eq [
-        { :entry => "entry_station", :exit => "exit_station"},
-        { :entry => "entry_station", :exit => "exit_station"}
-      ]
-    end
-  end
 end
