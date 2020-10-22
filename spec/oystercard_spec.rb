@@ -46,6 +46,12 @@ describe OysterCard do
         allow(subject).to receive(:balance).and_return(10)
         expect(subject.touch_in(entry_station)).to eq entry_station
       end
+
+      it "check to see if we are touching in again and returning a penalty" do
+        subject.top_up(20)
+        subject.touch_in(entry_station)
+        expect { subject.touch_in(entry_station) }.to change { subject.balance }.by (-OysterCard::PENALTY_FARE)
+      end
     end
 
     context "zero balance" do
@@ -58,18 +64,20 @@ describe OysterCard do
   end
 
   describe "#touch_out" do
-    let(:exit_station) { :station }
+    let(:station) { :station }
 
     it {is_expected.to respond_to(:touch_out).with(1).argument}
 
     it "can touch out" do
-      expect(subject.touch_out(exit_station)).to eq exit_station
+      expect(subject.touch_out(station)).to eq station
     end
 
     it "touch out reduces balance by MIN_JOURNEY_COST" do
       subject.top_up(10)
-      expect { subject.touch_out(exit_station) }.to change { subject.balance }.by(- OysterCard::MIN_JOURNEY_COST)
+      subject.touch_in(station)
+      expect { subject.touch_out(station) }.to change { subject.balance }.by(- OysterCard::MIN_JOURNEY_COST)
     end
+
   end
 
 end

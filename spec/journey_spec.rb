@@ -29,8 +29,19 @@ describe Journey do
     end
   end
 
-  describe "#penalty_fare" do
-    it { is_expected.to respond_to(:penalty_fare) }
+  describe "#fare" do
+    it { is_expected.to respond_to(:fare) }
+
+    it "entry station and exit_station exist - charge 1" do
+      subject.start(station)
+      subject.end(station)
+      expect(subject.fare).to eq OysterCard::MIN_JOURNEY_COST
+    end
+
+    it "charges a penalty fare if entry station is nil" do
+      subject.end(station)
+      expect(subject.fare).to eq OysterCard::PENALTY_FARE
+    end
   end
 
   describe "#in_journey?" do

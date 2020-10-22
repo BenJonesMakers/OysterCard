@@ -20,8 +20,12 @@ class Journey
     @exit_station = station
   end
 
-  def penalty_fare
-
+  def fare
+    if valid?(@entry_station) && valid?(@exit_station)
+      return OysterCard::MIN_JOURNEY_COST
+    else
+      OysterCard::PENALTY_FARE
+    end
   end
 
   def in_journey?
@@ -36,5 +40,9 @@ class Journey
 
   def journey_log(entry_station, exit_station)
     @journeys << {:entry => entry_station, :exit => exit_station}
+  end
+
+  def valid?(station)
+    !!station
   end
 end

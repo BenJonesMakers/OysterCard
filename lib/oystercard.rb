@@ -1,6 +1,7 @@
 class OysterCard
 
 MIN_JOURNEY_COST = 1
+PENALTY_FARE = 6
 
 attr_reader(:balance)
 attr_reader(:MAX_AMOUNT)
@@ -22,12 +23,17 @@ attr_reader(:MAX_AMOUNT)
   def touch_in(entry_station)
     raise NoFunds, "insufficient funds" if min_balance?
 
-    @journey.start(entry_station)
+    if @journey.in_journey?
+      deduct(@journey.fare)
+    else
+      @journey.start(entry_station)
+    end
   end
 
   def touch_out(exit_station)
-    deduct(MIN_JOURNEY_COST)
     @journey.end(exit_station)
+    deduct(@journey.fare)
+    exit_station
   end
 
 private
