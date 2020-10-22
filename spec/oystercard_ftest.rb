@@ -1,4 +1,5 @@
 require_relative '../lib/oystercard'
+require_relative '../lib/station'
 
 usercard01 = OysterCard.new
 
@@ -63,3 +64,6 @@ usercard05.top_up(10)
   usercard05.touch_out("exit_station")
 end
 usercard05.show_journeys
+
+new_station = Station.new("Kings Cross", 3)
+p new_station
