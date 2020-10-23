@@ -36,6 +36,10 @@ attr_reader(:MAX_AMOUNT)
     exit_station
   end
 
+  def show_journeys
+    @journey.show_journeys
+  end
+
 private
 
   def min_balance?

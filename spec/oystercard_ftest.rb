@@ -1,5 +1,6 @@
 require_relative '../lib/oystercard'
 require_relative '../lib/station'
+require_relative '../lib/journey'
 
 usercard01 = OysterCard.new
 
@@ -13,21 +14,24 @@ puts "top up with 10 - #{usercard01.balance}"
 #puts "deducts 5 from current balance leaving #{usercard01.balance}"
 
 begin
-  usercard01.touch_in("entry_station")
+  station = Station.new
+  usercard01.touch_in(station)
   puts "Passed touch_in"
 rescue => error
   puts error.message
 end
 
-begin
-  usercard01.in_journey?
-  puts "Passed in_journey?"
-rescue => error
-  puts error.message
-end
+# begin
+#   usercard01.in_journey?
+#   puts "Passed in_journey?"
+# rescue => error
+#   puts error.message
+# end
 
 begin
-  usercard01.touch_out("exit_station")
+  station = Station.new
+  usercard01.touch_in(station)
+  usercard01.touch_out(station)
   puts "Passed touch_out"
 rescue => error
   puts error.message
@@ -35,7 +39,8 @@ end
 
 begin
   usercard02 = OysterCard.new
-  usercard02.touch_in("entry_station")
+  station02 = Station.new
+  usercard02.touch_in(station02)
   puts "touch in passed - balance is #{usercard02.balance}"
 rescue NoFunds => error
   puts "expects error message 'insufficent funds'"
@@ -46,24 +51,29 @@ rescue => error
 end
 
 usercard03 = OysterCard.new
+station03 = Station.new
 usercard03.top_up(10)
 puts "\nminimum journey to be deducted"
 puts "current balance - #{usercard03.balance}"
-usercard03.touch_out("exit_station")
+usercard03.touch_in(station03)
+usercard03.touch_out(station03)
 puts "new balance should be reduced by 1 - #{usercard03.balance}"
 
-usercard04 = OysterCard.new
-usercard04.top_up(10)
-usercard04.touch_in("entry_station")
-usercard04.show_touch_in_station
+# usercard04 = OysterCard.new
+# station04 = Station.new
+# usercard04.top_up(10)
+# usercard04.touch_in(station04)
+# usercard04.show_touch_in_station
 
 usercard05 = OysterCard.new
+in_station = Station.new
+out_station = Station.new
 usercard05.top_up(10)
 2.times do
-  usercard05.touch_in("entry_station")
-  usercard05.touch_out("exit_station")
+  usercard05.touch_in(in_station)
+  usercard05.touch_out(out_station)
 end
-usercard05.show_journeys
+p usercard05.show_journeys
 
 new_station = Station.new("Kings Cross", 3)
 p new_station
